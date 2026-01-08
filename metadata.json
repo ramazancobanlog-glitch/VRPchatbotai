@@ -1,0 +1,7 @@
+{
+  "name": "zipChatBotAi",
+  "description": "A high-performance, aesthetically pleasing chatbot powered by Google's Gemini 3 models, featuring streaming responses, image support, and persistent chat history.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
