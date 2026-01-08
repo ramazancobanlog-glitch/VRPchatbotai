@@ -52,11 +52,12 @@ export class GeminiService {
     });
 
     try {
+      const isGemini = modelName.startsWith('gemini');
       const streamResponse = await this.ai.models.generateContentStream({
         model: modelName,
         contents: contents as any,
         config: {
-          systemInstruction: this.buildSystemInstruction(profile),
+          ...(isGemini && { systemInstruction: this.buildSystemInstruction(profile) }),
           temperature: 0.7,
           topP: 0.95,
           topK: 40,
@@ -76,9 +77,9 @@ export class GeminiService {
   async updateMemory(messages: Message[], currentProfile: UserProfile): Promise<UserProfile> {
     try {
       const recentContext = messages.slice(-4).map(m => `${m.role}: ${m.content}`).join("\n");
-      
+
       const response = await this.ai.models.generateContent({
-        model: GeminiModel.FLASH,
+        model: GeminiModel.GEMINI_3_FLASH,
         contents: `Based on this conversation snippet, extract the user's name and any stated preferences. 
         If not mentioned, keep the existing values: Name: ${currentProfile.name || 'Unknown'}, Preferences: ${currentProfile.preferences || 'None'}.
         
@@ -111,7 +112,7 @@ export class GeminiService {
   async generateTitle(firstMessage: string): Promise<string> {
     try {
       const response = await this.ai.models.generateContent({
-        model: GeminiModel.FLASH,
+        model: GeminiModel.GEMINI_3_FLASH,
         contents: `Generate a very short (max 4 words) title for a chat that starts with: "${firstMessage}". Return only the title text, no quotes.`,
       });
       return response.text?.trim() || "New Chat";

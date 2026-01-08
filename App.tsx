@@ -15,7 +15,7 @@ const App: React.FC = () => {
   const [threads, setThreads] = useState<ChatThread[]>([]);
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [selectedModel, setSelectedModel] = useState<string>(GeminiModel.FLASH);
+  const [selectedModel, setSelectedModel] = useState<string>(GeminiModel.GEMINI_3_FLASH);
   const [userProfile, setUserProfile] = useState<UserProfile>({ name: null, preferences: null });
   const [showLanding, setShowLanding] = useState(true);
 
@@ -158,7 +158,8 @@ const App: React.FC = () => {
         }
       });
 
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Chat Error:", error);
       updateLastMessageContent(currentThread.id, "Üzgünüm, isteğinizi işlerken bir hata oluştu.");
     }
   };
